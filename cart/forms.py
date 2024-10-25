@@ -1,15 +1,26 @@
+# Импортируем модуль forms из Django, который предоставляет инструменты для создания форм.
 from django import forms
 
-
+# Определяем доступные варианты количества продуктов, от 1 до 10.
+# Это списковое выражение создает кортежи, где каждый кортеж содержит значение и текст для выбора.
 PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(1, 11)]
 
-
+# Определяем форму для добавления продукта в корзину.
 class CartAddProductForm(forms.Form):
+    # Поле для выбора количества товара. Используем TypedChoiceField для явного преобразования значений в цельные числа.
     quantity = forms.TypedChoiceField(
+        # Задаем доступные варианты для выбора количества с помощью предварительно определенных кортежей.
         choices=PRODUCT_QUANTITY_CHOICES,
+        # Преобразуем выбранное значение в целое число.
         coerce=int
     )
-    override = forms.BooleanField(required=False,
-                                  initial=False,
-                                  widget=forms.HiddenInput)
-    
+
+    # Поле для переопределения количества товара. Необязательное поле.
+    override = forms.BooleanField(
+        # Поле не является обязательным для заполнения.
+        required=False,
+        # Устанавливаем значение по умолчанию как False.
+        initial=False,
+        # Используем скрытое поле для отправки информации о переопределении без отображения в интерфейсе.
+        widget=forms.HiddenInput
+    )
